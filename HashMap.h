@@ -3,19 +3,23 @@
 
 #include <string>
 
+// Phone book: maps a phone number (string) to a tower id (int).
+// Separate chaining with hand-built linked-list buckets. No STL containers.
+
 class HashMap {
 private:
     struct Node {
-        std::string key;
-        int value;         
+        std::string key;   // phone number
+        int value;         // tower id
         Node* next;
         Node(const std::string& k, int v) : key(k), value(v), next(nullptr) {}
     };
 
-    Node** buckets;        
+    Node** buckets;        // array of bucket heads
     int bucketCount;
     int itemCount;
 
+    // Simple polynomial rolling hash over the characters.
     unsigned long hashKey(const std::string& key) const {
         unsigned long h = 5381;
         for (int i = 0; i < (int)key.size(); ++i) {
@@ -43,22 +47,25 @@ public:
         delete[] buckets;
     }
 
+    // Insert or update the tower for a phone number.
     void put(const std::string& key, int value) {
         unsigned long idx = hashKey(key);
         Node* cur = buckets[idx];
         while (cur) {
-            if (cur->key == key) { 
+            if (cur->key == key) {     // already registered: update tower
                 cur->value = value;
                 return;
             }
             cur = cur->next;
         }
-        Node* node = new Node(key, value);
+        Node* node = new Node(key, value);   // new subscriber: push to front
         node->next = buckets[idx];
         buckets[idx] = node;
         ++itemCount;
     }
 
+    // Look up the tower for a phone number.
+    // Returns true and writes the tower into outValue if found.
     bool get(const std::string& key, int& outValue) const {
         unsigned long idx = hashKey(key);
         Node* cur = buckets[idx];

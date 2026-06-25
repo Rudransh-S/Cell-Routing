@@ -5,6 +5,9 @@
 #include "MinHeap.h"
 #include "Queue.h"
 
+// CellRoute - mobile network call simulation.
+// HashMap = subscriber registry, Graph = network, MinHeap = Dijkstra PQ,
+// Queue = BFS frontier. No STL containers used for the core structures.
 
 static const int INF = 1000000000;
 
@@ -18,8 +21,9 @@ static char towerName(int id) {
     return (char)('A' + id);
 }
 
+// Print a path stored in previous[] from src to dst, src-first.
 static void printPath(int* previous, int src, int dst) {
-    
+    // Count hops to size a temporary buffer.
     int len = 0;
     for (int at = dst; at != -1; at = previous[at]) ++len;
     int* path = new int[len];
@@ -34,6 +38,7 @@ static void printPath(int* previous, int src, int dst) {
     delete[] path;
 }
 
+// Dijkstra: lowest total delay from src to dst over the weighted graph.
 static void routeDijkstra(const Graph& net, int src, int dst) {
     int n = net.size();
     int* dist = new int[n];
@@ -48,7 +53,7 @@ static void routeDijkstra(const Graph& net, int src, int dst) {
     while (!pq.isEmpty()) {
         int u, d;
         pq.pop(u, d);
-        if (done[u]) continue;   
+        if (done[u]) continue;     // stale entry, skip
         done[u] = true;
         for (Graph::Edge* e = net.neighbours(u); e; e = e->next) {
             int v = e->to;
@@ -74,6 +79,7 @@ static void routeDijkstra(const Graph& net, int src, int dst) {
     delete[] done;
 }
 
+// BFS: fewest hops (ignores weights), for contrast with Dijkstra.
 static void routeBFS(const Graph& net, int src, int dst) {
     int n = net.size();
     int* hops = new int[n];
