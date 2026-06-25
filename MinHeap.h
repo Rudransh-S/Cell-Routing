@@ -1,9 +1,6 @@
 #ifndef MINHEAP_H
 #define MINHEAP_H
 
-// Array-based binary min-heap used as Dijkstra's priority queue.
-// Stores (tower, distance) pairs, ordered by smallest distance. No STL.
-
 class MinHeap {
 private:
     struct Item {
@@ -77,7 +74,6 @@ public:
         siftUp(count - 1);
     }
 
-    // Remove and return the (tower, dist) with smallest dist.
     void pop(int& tower, int& dist) {
         tower = data[0].tower;
         dist = data[0].dist;

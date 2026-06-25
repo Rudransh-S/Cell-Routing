@@ -1,14 +1,13 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-// Array-based circular queue of ints, used for BFS. No STL.
 
 class Queue {
 private:
     int* data;
     int capacity;
-    int head;   // index of front
-    int tail;   // index of next free slot
+    int head;   
+    int tail;   
     int count;
 
     void grow() {

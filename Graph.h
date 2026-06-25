@@ -1,22 +1,20 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-// Network topology: towers are nodes, links are weighted undirected edges.
-// Adjacency list built from hand-rolled linked lists. No STL containers.
 
 class Graph {
 public:
     struct Edge {
-        int to;        // neighbour tower id
-        int weight;    // link delay
+        int to;        
+        int weight;    
         Edge* next;
         Edge(int t, int w) : to(t), weight(w), next(nullptr) {}
     };
 
 private:
-    Edge** adj;        // adj[i] = head of edge list for tower i
-    int capacity;      // size of the adj array
-    int towerCount;    // highest tower id seen + 1
+    Edge** adj;        
+    int capacity;      
+    int towerCount;    
 
     void grow(int needed) {
         int newCap = capacity;
@@ -53,7 +51,6 @@ public:
         if (id >= towerCount) towerCount = id + 1;
     }
 
-    // Undirected link: push an edge onto both towers' lists.
     void addLink(int a, int b, int weight) {
         addTower(a);
         addTower(b);
